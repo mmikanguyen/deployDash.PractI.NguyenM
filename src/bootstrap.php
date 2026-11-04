@@ -38,7 +38,7 @@ if (env('DASH_USER') && env('DASH_PASS')) {
     $u = $_SERVER['PHP_AUTH_USER'] ?? '';
     $p = $_SERVER['PHP_AUTH_PW'] ?? '';
     if (!hash_equals(env('DASH_USER'), $u) || !hash_equals(env('DASH_PASS'), $p)) {
-        header('WWW-Authenticate: Basic realm="Covers dashboard"');
+        header('WWW-Authenticate: Basic realm="Dining Insights"');
         http_response_code(401);
         echo 'Sign in to view the dashboard.';
         exit;

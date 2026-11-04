@@ -19,7 +19,7 @@ html { background: var(--page); }
 body {
   margin: 0;
   color: var(--ink);
-  font: 400 13px/1.4 var(--font-body);
+  font: 400 12px/1.35 var(--font-body);
   font-variant-numeric: tabular-nums;
 }
 h1, h2 { font-family: var(--font-head); margin: 0; }
@@ -27,6 +27,9 @@ h1, h2 { font-family: var(--font-head); margin: 0; }
 
 /* ---------- header ---------- */
 .top {
+  max-width: 1360px;
+  margin: 0 auto;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
@@ -35,7 +38,7 @@ h1, h2 { font-family: var(--font-head); margin: 0; }
   padding: 10px 16px 8px;
 }
 .brand { display: flex; align-items: baseline; gap: 12px; }
-.brand h1 { font-size: 28px; line-height: 1; font-weight: 700; letter-spacing: -0.02em; }
+.brand h1 { font-size: 24px; line-height: 1; font-weight: 700; letter-spacing: -0.02em; }
 .brand p { margin: 0; color: var(--muted); }
 
 .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
@@ -71,8 +74,12 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns: 220px minmax(0, 1fr);
   gap: 12px;
+  align-content: start;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
   padding: 0 16px 14px;
 }
 .layout[aria-busy="true"] .grid { opacity: 0.5; }
@@ -81,7 +88,8 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   min-height: 0;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 175px));
+  align-content: start;
   gap: 10px;
   transition: opacity 0.15s;
 }
@@ -107,7 +115,7 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   border: 1px solid var(--line);
   border-radius: 4px;
 }
-.panel h2 { font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.panel h2 { font-size: 13px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .panel .sub { margin: 1px 0 0; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .panel .sub:empty { display: none; }
 
@@ -118,7 +126,7 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   position: relative;
   min-height: 0;
   overflow: auto;
-  padding: 14px 16px 18px;
+  padding: 10px 12px 14px;
   background: var(--paper);
   border: 1px solid var(--line);
   border-bottom: 0;
@@ -135,12 +143,12 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   height: 8px;
   background: radial-gradient(circle at 8px 0, var(--paper) 8px, transparent 8.5px) 0 0 / 16px 8px repeat-x;
 }
-.receipt h2 { font-size: 20px; font-weight: 700; text-align: center; }
+.receipt h2 { font-size: 17px; font-weight: 700; text-align: center; }
 .receipt .scope { margin: 2px 0 8px; text-align: center; font-size: 11px; color: var(--muted); }
 .receipt .rule { margin: 7px 0; border: 0; border-top: 2px dashed #b9b5a6; }
 .receipt .line { display: flex; align-items: baseline; gap: 6px; padding: 1px 0; }
 .receipt .line .dots { flex: 1; border-bottom: 1px dotted #9a9788; transform: translateY(-3px); min-width: 10px; }
-.receipt .line.big { font: 700 17px/1.3 var(--font-head); padding-top: 3px; }
+.receipt .line.big { font: 700 15px/1.3 var(--font-head); padding-top: 3px; }
 .receipt .swatch { display: none; width: 9px; height: 9px; border-radius: 2px; align-self: center; }
 .receipt .line.food .swatch { background: var(--food); }
 .receipt .line.alcohol .swatch { background: var(--alcohol); }
@@ -173,8 +181,8 @@ tbody tr:hover { background: #f3f7f6; }
   .receipt { max-width: 420px; margin: 0 auto 10px; max-height: none; }
   .grid { display: flex; flex-direction: column; gap: 12px; }
   .panel { padding: 12px 14px; }
-  .chart { flex: none; height: 260px; }
-  .heat { height: 240px; flex: none; }
+  .chart { flex: none; height: 200px; }
+  .heat { height: 190px; flex: none; }
   .table-wrap { flex: none; }
   .panel h2 { white-space: normal; }
 }

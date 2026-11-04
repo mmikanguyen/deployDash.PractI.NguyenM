@@ -37,11 +37,11 @@
   /* ---------- chart helpers ---------- */
   function setupChartDefaults() {
     Chart.defaults.font.family = "'Public Sans', 'Segoe UI', system-ui, sans-serif";
-    Chart.defaults.font.size = 11;
+    Chart.defaults.font.size = 10;
     Chart.defaults.color = '#55696a';
     Chart.defaults.maintainAspectRatio = false;
-    Chart.defaults.plugins.legend.labels.boxWidth = 10;
-    Chart.defaults.plugins.legend.labels.boxHeight = 10;
+    Chart.defaults.plugins.legend.labels.boxWidth = 8;
+    Chart.defaults.plugins.legend.labels.boxHeight = 8;
     Chart.defaults.plugins.tooltip.padding = 8;
   }
 

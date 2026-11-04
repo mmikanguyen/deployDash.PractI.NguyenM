@@ -1,4 +1,4 @@
-# Covers: restaurant visits dashboard
+# Dining Insights: restaurant visits dashboard
 
 PHP + MySQL (Aiven) + Chart.js. No Shiny, no build step.
 
