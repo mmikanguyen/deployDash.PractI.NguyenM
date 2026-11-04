@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Covers: restaurant visits and sales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Covers</h1>
+      <p>Visits, guests and sales across every restaurant</p>
+    </div>
+    <div class="filters" role="group" aria-label="Filters">
+      <label>Year
+        <select id="f-year"><option value="">All years</option></select>
+      </label>
+      <label>Restaurant
+        <select id="f-restaurant"><option value="">All restaurants</option></select>
+      </label>
+      <label>Meal
+        <select id="f-meal"><option value="">All meals</option></select>
+      </label>
+      <button type="button" id="reset" class="ghost">Clear filters</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" role="alert" hidden></div>
+
+  <main class="layout" id="main" aria-busy="true">
+    <aside class="receipt" id="receipt" aria-label="Grand totals"></aside>
+
+    <div class="grid">
+      <section class="panel span-12">
+        <h2>Sales and visits by month</h2>
+        <p class="sub">Food and alcohol sales stacked; the line is the number of visits.</p>
+        <div class="chart tall"><canvas id="c-monthly"></canvas></div>
+      </section>
+
+      <section class="panel span-4">
+        <h2>Food and alcohol</h2>
+        <p class="sub" id="mix-note"></p>
+        <div class="chart"><canvas id="c-mix"></canvas></div>
+      </section>
+
+      <section class="panel span-8">
+        <h2>Total sales by restaurant</h2>
+        <p class="sub">Food plus alcohol, before tips.</p>
+        <div class="chart"><canvas id="c-rev"></canvas></div>
+      </section>
+
+      <section class="panel span-6">
+        <h2>Visits by restaurant</h2>
+        <div class="chart"><canvas id="c-visits"></canvas></div>
+      </section>
+
+      <section class="panel span-6">
+        <h2>Unique customers by restaurant</h2>
+        <p class="sub" id="cust-note"></p>
+        <div class="chart"><canvas id="c-cust"></canvas></div>
+      </section>
+
+      <section class="panel span-12">
+        <h2>Restaurant scorecard</h2>
+        <p class="sub">Select a column heading to sort.</p>
+        <div class="table-wrap" id="t-rest"></div>
+      </section>
+
+      <section class="panel span-7">
+        <h2>Year over year</h2>
+        <p class="sub">Monthly sales, one line per year.</p>
+        <div class="chart"><canvas id="c-yoy"></canvas></div>
+      </section>
+
+      <section class="panel span-5">
+        <h2>Busiest days</h2>
+        <div class="chart"><canvas id="c-dow"></canvas></div>
+      </section>
+
+      <section class="panel span-12">
+        <h2>When people arrive</h2>
+        <p class="sub">Visits by day of week and hour. Darker means busier.</p>
+        <div id="heat" class="heat"></div>
+      </section>
+
+      <section class="panel span-4">
+        <h2>Meal type</h2>
+        <div class="chart"><canvas id="c-meal"></canvas></div>
+      </section>
+
+      <section class="panel span-4">
+        <h2>How bills are paid</h2>
+        <div class="chart"><canvas id="c-pay"></canvas></div>
+      </section>
+
+      <section class="panel span-4">
+        <h2>Party size</h2>
+        <div class="chart"><canvas id="c-party"></canvas></div>
+      </section>
+
+      <section class="panel span-12">
+        <h2>Loyalty members and everyone else</h2>
+        <div class="table-wrap" id="t-loyal"></div>
+      </section>
+
+      <section class="panel span-6">
+        <h2>Servers with the most tips</h2>
+        <div class="table-wrap" id="t-servers"></div>
+      </section>
+
+      <section class="panel span-6">
+        <h2>Customers who spend the most</h2>
+        <div class="table-wrap" id="t-customers"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot"><span id="updated"></span></footer>
+</body>
+</html>
