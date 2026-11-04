@@ -116,15 +116,6 @@ try {
         GROUP BY DATE_FORMAT(v.VisitDate, '%Y-%m')
         ORDER BY month", $f);
 
-    $yoy = run($pdo, "
-        SELECT YEAR(v.VisitDate) AS year, MONTH(v.VisitDate) AS month,
-               COUNT(DISTINCT v.VisitID) AS visits,
-               COALESCE(SUM(b.FoodBill), 0) + COALESCE(SUM(b.AlcoholBill), 0) AS revenue
-        FROM $V v LEFT JOIN $B b ON b.visitID = v.VisitID
-        {WHERE}
-        GROUP BY YEAR(v.VisitDate), MONTH(v.VisitDate)
-        ORDER BY year, month", $f, ['year']);
-
     $weekday = run($pdo, "
         SELECT DAYOFWEEK(v.VisitDate) AS dow,
                COUNT(DISTINCT v.VisitID) AS visits,
@@ -198,22 +189,9 @@ try {
         ORDER BY tips DESC
         LIMIT 10", $f);
 
-    $customers = run($pdo, "
-        SELECT c.CustomerID AS id, c.CustomerName AS name,
-               COUNT(DISTINCT v.VisitID)       AS visits,
-               COUNT(DISTINCT v.RestaurantID)  AS restaurants,
-               COALESCE(SUM(b.FoodBill), 0) + COALESCE(SUM(b.AlcoholBill), 0) AS spend
-        FROM $V v
-        JOIN $C c ON c.CustomerID = v.CustomerID
-        LEFT JOIN $B b ON b.visitID = v.VisitID
-        {WHERE}
-        GROUP BY c.CustomerID, c.CustomerName
-        ORDER BY spend DESC
-        LIMIT 10", $f);
-
     echo json_encode(compact(
-        'filters', 'kpis', 'restaurants', 'monthly', 'yoy', 'weekday', 'heat',
-        'meals', 'payments', 'party', 'loyalty', 'servers', 'customers'
+        'filters', 'kpis', 'restaurants', 'monthly', 'weekday', 'heat',
+        'meals', 'payments', 'party', 'loyalty', 'servers'
     ), JSON_PARTIAL_OUTPUT_ON_ERROR);
 } catch (Throwable $e) {
     http_response_code(500);

@@ -37,12 +37,12 @@
   /* ---------- chart helpers ---------- */
   function setupChartDefaults() {
     Chart.defaults.font.family = "'Public Sans', 'Segoe UI', system-ui, sans-serif";
-    Chart.defaults.font.size = 12;
+    Chart.defaults.font.size = 11;
     Chart.defaults.color = '#55696a';
     Chart.defaults.maintainAspectRatio = false;
-    Chart.defaults.plugins.legend.labels.boxWidth = 12;
-    Chart.defaults.plugins.legend.labels.boxHeight = 12;
-    Chart.defaults.plugins.tooltip.padding = 10;
+    Chart.defaults.plugins.legend.labels.boxWidth = 10;
+    Chart.defaults.plugins.legend.labels.boxHeight = 10;
+    Chart.defaults.plugins.tooltip.padding = 8;
   }
 
   function draw(id, config) {
@@ -95,8 +95,7 @@
       ${line('Average tip', pct(tipRate))}
       ${line('Average wait (min)', dec1(k.avg_wait))}
       ${k.avg_discount != null ? line('Average food discount', dec1(k.avg_discount) + '%') : ''}
-      <hr class="rule">
-      <p class="thanks">Customers are counted once per restaurant, and once overall.</p>`;
+`;
   }
 
   function renderMonthly(rows) {
@@ -133,66 +132,21 @@
       },
     });
     $('#mix-note').textContent = sales
-      ? `Alcohol is ${((k.alcohol / sales) * 100).toFixed(1)}% of sales: ${money(k.alcohol)} against ${money(k.food)} for food.`
-      : 'No sales in this selection.';
+      ? `Alcohol is ${((k.alcohol / sales) * 100).toFixed(1)}% of sales`
+      : 'No sales in this selection';
   }
 
-  function renderRestaurants(rows, kpis) {
+  function renderRestaurants(rows) {
     const names = rows.map((r) => r.name);
     hbar('c-rev', names, [
       { label: 'Food', data: rows.map((r) => r.food), backgroundColor: COLORS.food },
       { label: 'Alcohol', data: rows.map((r) => r.alcohol), backgroundColor: COLORS.alcohol },
     ], { money: true, stacked: true, tooltip: { label: (c) => `${c.dataset.label}: ${money(c.raw)}` } });
 
-    hbar('c-visits', names, [{ label: 'Visits', data: rows.map((r) => r.visits), backgroundColor: COLORS.steel }]);
-
-    hbar('c-cust', names, [{ label: 'Unique customers', data: rows.map((r) => r.customers), backgroundColor: COLORS.tips }]);
-    $('#cust-note').textContent = `${int(kpis.customers)} unique customers across all restaurants in this selection. A customer who visits several restaurants counts once in that total.`;
-
-    const cols = [
-      { key: 'name', label: 'Restaurant' },
-      { key: 'location', label: 'Location' },
-      { key: 'visits', label: 'Visits', num: true, fmt: int },
-      { key: 'customers', label: 'Customers', num: true, fmt: int },
-      { key: 'food', label: 'Food', num: true, fmt: money },
-      { key: 'alcohol', label: 'Alcohol', num: true, fmt: money },
-      { key: 'tips', label: 'Tips', num: true, fmt: money },
-      { key: 'avg_check', label: 'Avg check', num: true, fmt: money2 },
-      { key: 'tip_rate', label: 'Tip rate', num: true, fmt: pct },
-      { key: 'avg_wait', label: 'Avg wait (min)', num: true, fmt: dec1 },
-    ];
-    const data = rows.map((r) => {
-      const sales = r.food + r.alcohol;
-      return {
-        ...r,
-        location: [r.city, r.state].filter(Boolean).join(', '),
-        avg_check: r.visits ? sales / r.visits : 0,
-        tip_rate: sales ? (r.tips / sales) * 100 : null,
-      };
-    });
-    sortableTable('#t-rest', cols, data, 'visits');
-  }
-
-  function renderYoY(rows) {
-    const years = [...new Set(rows.map((r) => r.year))].sort();
-    draw('c-yoy', {
-      type: 'line',
-      data: {
-        labels: MONTHS,
-        datasets: years.map((y, i) => ({
-          label: String(y),
-          data: MONTHS.map((_, m) => rows.find((r) => r.year === y && r.month === m + 1)?.revenue ?? null),
-          borderColor: SERIES[i % SERIES.length],
-          backgroundColor: SERIES[i % SERIES.length],
-          borderWidth: 2.5, pointRadius: 3, tension: 0.25, spanGaps: true,
-        })),
-      },
-      options: {
-        interaction: { mode: 'index', intersect: false },
-        plugins: { tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${money(c.raw)}` } } },
-        scales: { x: noGrid, y: { ...moneyAxis, beginAtZero: true } },
-      },
-    });
+    hbar('c-visits', names, [
+      { label: 'Visits', data: rows.map((r) => r.visits), backgroundColor: COLORS.steel },
+      { label: 'Unique customers', data: rows.map((r) => r.customers), backgroundColor: COLORS.tips },
+    ]);
   }
 
   function renderWeekday(rows) {
@@ -214,14 +168,15 @@
     const lookup = new Map(cells.map((r) => [`${r.dow}-${r.hr}`, r.visits]));
     const hourName = (h) => (h === 0 ? '12a' : h < 12 ? h + 'a' : h === 12 ? '12p' : h - 12 + 'p');
     const n = hi - lo + 1;
-    let html = `<div class="heat-grid" style="grid-template-columns:44px repeat(${n}, minmax(0,1fr))"><span></span>`;
-    for (let h = lo; h <= hi; h++) html += `<span class="heat-label col">${hourName(h)}</span>`;
+    const step = n > 12 ? 2 : 1;
+    let html = `<div class="heat-grid" style="grid-template-columns:30px repeat(${n}, minmax(0,1fr))"><span></span>`;
+    for (let h = lo; h <= hi; h++) html += `<span class="heat-label col">${(h - lo) % step === 0 ? hourName(h) : ''}</span>`;
     for (const [dow, name] of DAYS) {
       html += `<span class="heat-label">${name}</span>`;
       for (let h = lo; h <= hi; h++) {
         const v = lookup.get(`${dow}-${h}`) || 0;
         const a = v ? 0.12 + 0.88 * (v / max) : 0;
-        html += `<span class="heat-cell" style="${v ? `background:rgba(47,111,94,${a.toFixed(2)})` : ''}" title="${name} ${hourName(h)}: ${v} visits">${v && n <= 16 ? v : ''}</span>`;
+        html += `<span class="heat-cell" style="${v ? `background:rgba(47,111,94,${a.toFixed(2)})` : ''}" title="${name} ${hourName(h)}: ${v} visits"></span>`;
       }
     }
     el.innerHTML = html + '</div>';
@@ -251,37 +206,23 @@
     });
   }
 
-  function renderPeople(loyalty, servers, customers) {
-    const lc = [
+  function renderPeople(loyalty, servers) {
+    sortableTable('#t-loyal', [
       { key: 'name', label: 'Group' },
       { key: 'customers', label: 'Customers', num: true, fmt: int },
-      { key: 'visits', label: 'Visits', num: true, fmt: int },
-      { key: 'revenue', label: 'Sales', num: true, fmt: money },
-      { key: 'per_visit', label: 'Sales per visit', num: true, fmt: money2 },
-      { key: 'visits_per', label: 'Visits per customer', num: true, fmt: dec1 },
+      { key: 'per_visit', label: 'Per visit', num: true, fmt: money2 },
       { key: 'tip_rate', label: 'Tip rate', num: true, fmt: pct },
-    ];
-    sortableTable('#t-loyal', lc, loyalty.map((r) => ({
+    ], loyalty.map((r) => ({
       ...r,
       per_visit: r.visits ? r.revenue / r.visits : 0,
-      visits_per: r.customers ? r.visits / r.customers : 0,
       tip_rate: r.revenue ? (r.tips / r.revenue) * 100 : null,
-    })), 'revenue');
+    })), 'customers');
 
     sortableTable('#t-servers', [
       { key: 'name', label: 'Server' },
-      { key: 'restaurant', label: 'Restaurant' },
-      { key: 'visits', label: 'Visits', num: true, fmt: int },
       { key: 'tips', label: 'Tips', num: true, fmt: money },
       { key: 'tip_rate', label: 'Tip rate', num: true, fmt: pct },
-    ], servers.map((s) => ({ ...s, tip_rate: s.revenue ? (s.tips / s.revenue) * 100 : null })), 'tips');
-
-    sortableTable('#t-customers', [
-      { key: 'name', label: 'Customer' },
-      { key: 'visits', label: 'Visits', num: true, fmt: int },
-      { key: 'restaurants', label: 'Restaurants', num: true, fmt: int },
-      { key: 'spend', label: 'Spent', num: true, fmt: money },
-    ], customers, 'spend');
+    ], servers.slice(0, 5).map((s) => ({ ...s, tip_rate: s.revenue ? (s.tips / s.revenue) * 100 : null })), 'tips');
   }
 
   /* ---------- sortable table ---------- */
@@ -348,12 +289,11 @@
       renderReceipt(d.kpis, scopeText());
       renderMonthly(d.monthly);
       renderMix(d.kpis);
-      renderRestaurants(d.restaurants, d.kpis);
-      renderYoY(d.yoy);
+      renderRestaurants(d.restaurants);
       renderWeekday(d.weekday);
       renderHeat(d.heat);
       renderMix2(d.meals, d.payments, d.party);
-      renderPeople(d.loyalty, d.servers, d.customers);
+      renderPeople(d.loyalty, d.servers);
       $('#updated').textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     } catch (e) {
       showError(e.message);

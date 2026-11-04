@@ -37,3 +37,12 @@ With MAMP instead: set the document root to the `public` folder.
 The free tier sleeps when idle, so the first load after a break takes about a minute. Railway, Fly.io or any PHP host also work: use the Dockerfile, or upload `public/` and `src/` to a PHP host and set the same variables.
 
 Set `DASH_USER` and `DASH_PASS` if the dashboard should not be public. It shows customer names.
+
+## Assumptions to check
+
+- Table names are `Visits`, `Bills` (was Transactions), `Restaurants`, `Servers`, `Customers`, `Meal`, `Payment`; `Visits.RestaurantID` (was rID). Override with the `TBL_*` variables if yours differ.
+- Sales = `FoodBill + AlcoholBill`, before tips. `FoodDiscountPercentage` is shown as an average but is not subtracted, on the assumption that `FoodBill` is already the amount billed. If not, tell me and it is a one-line change in `api.php`.
+- `WaitTime` is read as minutes.
+- A customer counts as a loyalty member when `LoyaltyMember` is Y, Yes, True, T or 1.
+- Per-restaurant charts ignore the Restaurant filter so restaurants stay comparable; every other chart respects all three filters.
+- The connection is set to read-only, and SSN, email and phone are never queried.
