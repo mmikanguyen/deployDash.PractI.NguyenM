@@ -222,7 +222,7 @@
       { key: 'name', label: 'Server' },
       { key: 'tips', label: 'Tips', num: true, fmt: money },
       { key: 'tip_rate', label: 'Tip rate', num: true, fmt: pct },
-    ], servers.slice(0, 5).map((s) => ({ ...s, tip_rate: s.revenue ? (s.tips / s.revenue) * 100 : null })), 'tips');
+    ], servers.slice(0, 4).map((s) => ({ ...s, tip_rate: s.revenue ? (s.tips / s.revenue) * 100 : null })), 'tips');
   }
 
   /* ---------- sortable table ---------- */
