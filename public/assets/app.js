@@ -55,6 +55,7 @@
   const noGrid = { grid: { display: false } };
 
   function hbar(id, labels, datasets, opts = {}) {
+    document.getElementById(id).parentElement.style.minHeight = Math.max(170, labels.length * (opts.perRow || 28) + 50) + 'px';
     draw(id, {
       type: 'bar',
       data: { labels, datasets },
@@ -99,6 +100,7 @@
   }
 
   function renderMonthly(rows) {
+    document.getElementById('c-monthly').parentElement.style.minWidth = rows.length * 30 + 'px';
     draw('c-monthly', {
       type: 'bar',
       data: {
@@ -141,12 +143,12 @@
     hbar('c-rev', names, [
       { label: 'Food', data: rows.map((r) => r.food), backgroundColor: COLORS.food },
       { label: 'Alcohol', data: rows.map((r) => r.alcohol), backgroundColor: COLORS.alcohol },
-    ], { money: true, stacked: true, tooltip: { label: (c) => `${c.dataset.label}: ${money(c.raw)}` } });
+    ], { money: true, stacked: true, perRow: 28, tooltip: { label: (c) => `${c.dataset.label}: ${money(c.raw)}` } });
 
     hbar('c-visits', names, [
       { label: 'Visits', data: rows.map((r) => r.visits), backgroundColor: COLORS.steel },
       { label: 'Unique customers', data: rows.map((r) => r.customers), backgroundColor: COLORS.tips },
-    ]);
+    ], { perRow: 44 });
   }
 
   function renderWeekday(rows) {
@@ -222,7 +224,7 @@
       { key: 'name', label: 'Server' },
       { key: 'tips', label: 'Tips', num: true, fmt: money },
       { key: 'tip_rate', label: 'Tip rate', num: true, fmt: pct },
-    ], servers.slice(0, 4).map((s) => ({ ...s, tip_rate: s.revenue ? (s.tips / s.revenue) * 100 : null })), 'tips');
+    ], servers.slice(0, 10).map((s) => ({ ...s, tip_rate: s.revenue ? (s.tips / s.revenue) * 100 : null })), 'tips');
   }
 
   /* ---------- sortable table ---------- */

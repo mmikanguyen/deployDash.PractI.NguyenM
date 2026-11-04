@@ -116,18 +116,21 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 4px;
+  overflow: auto;
+  scrollbar-width: thin;
 }
-.panel h2 { font-size: 13px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.panel h2 { position: sticky; top: 0; z-index: 1; background: var(--card); flex: none; font-size: 13px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .panel .sub { margin: 1px 0 0; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .panel .sub:empty { display: none; }
 
-.chart { position: relative; flex: 1; min-height: 0; margin-top: 4px; }
+.chart { position: relative; flex: 1 0 170px; min-height: 170px; margin-top: 4px; }
 
 /* ---------- receipt (grand totals) ---------- */
 .receipt {
   position: relative;
   min-height: 0;
-  overflow: hidden;
+  overflow: auto;
+  scrollbar-width: thin;
   font-size: clamp(10px, 1.55vh, 12px);
   padding: 10px 12px 14px;
   background: var(--paper);
@@ -159,7 +162,7 @@ body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 .receipt .line.food .swatch, .receipt .line.alcohol .swatch, .receipt .line.tips .swatch { display: inline-block; }
 
 /* ---------- tables ---------- */
-.table-wrap { flex: 1; min-height: 0; margin-top: 2px; overflow: hidden; }
+.table-wrap { flex: 1 0 auto; margin-top: 2px; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 2px 6px; border-bottom: 1px solid #e3eae8; text-align: left; white-space: nowrap; }
 th.num, td.num { text-align: right; }
@@ -171,7 +174,7 @@ tbody tr:hover { background: #f3f7f6; }
 .empty { margin: 8px 0 0; color: var(--muted); }
 
 /* ---------- heat map ---------- */
-.heat { flex: 1; min-height: 0; margin-top: 4px; display: flex; }
+.heat { flex: 1 0 150px; min-height: 150px; min-width: 300px; margin-top: 4px; display: flex; }
 .heat-grid { flex: 1; display: grid; gap: 2px; grid-template-rows: auto repeat(7, minmax(0, 1fr)); }
 .heat-cell { border-radius: 2px; background: #eef3f2; }
 .heat-label { font-size: 10px; color: var(--muted); display: grid; align-items: center; }
@@ -183,7 +186,8 @@ tbody tr:hover { background: #f3f7f6; }
   .layout { display: block; padding-bottom: 24px; }
   .receipt { max-width: 420px; margin: 0 auto 10px; max-height: none; }
   .grid { display: flex; flex-direction: column; gap: 12px; }
-  .panel { padding: 12px 14px; }
+  .panel { padding: 12px 14px; overflow: visible; }
+  .panel h2 { position: static; }
   .chart { flex: none; height: 200px; }
   .heat { height: 190px; flex: none; }
   .table-wrap { flex: none; }
